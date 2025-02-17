@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">User Management</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>User list</h4>
+            </div>
+        </div>
+
+        <!-- Search form and Sort by role -->
+        <div class="row d-flex justify-content-start">
+            <div class="col-3" id="searchForm">
+                <div class="input-group mb-3">
+                    <input class="form-control" type="search" name="search" id="searchUser"
+                           aria-label="Recipient's username" aria-describedby="searchIcon" placeholder="Search">
+                    <button type="button" class="btn btn-outline-secondary" disabled>
+                        <img src="/images/search.png" alt="search-icon" id="searchIcon">
+                    </button>
+                </div>
+            </div>
+            <div class="col-3" id="sortByRoleForm">
+                <div>
+                    <select class="form-select" name="role" id="filterByRole">
+                        <option value="" selected>Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Recruiter">Recruiter</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Interviewer">Interviewer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6 d-flex justify-content-end pe-4">
+                <a th:href="@{/users/add}">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        <!-- END Search form and Sort by role -->
+        <div class="row">
+            <span id="resultMessage" class="text-end fst-italic"></span>
+        </div>
+        <!-- User list table -->
+        <div class="row" id="userTable">
+            <div class="col-12 table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone No.</th>
+                        <th scope="col">Role</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="userList">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="row" id="pagination">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end align-items-center">
+                        <li class="page-item">
+                            <span id="pageInfo"></span>
+                        </li>
+                        <li class="page-item">
+                            <button class="btn page-link" id="prevPage">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m15 19-7-7 7-7"/>
+                                </svg>
+                            </button>
+                        </li>
+                        <li class="page-item">
+                            <button class="btn page-link" id="nextPage">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m9 5 7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- END Pagination -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

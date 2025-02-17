@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-GB" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">View interview schedule detail</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/interview-schedules}">Interview
+                            Schedule
+                            List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">View
+                            Interview Schedule Detail</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4" id="createUserForm">
+            <div class="row mb-3">
+                <div id="statusButtonContainer" class="col-12 d-flex justify-content-end">
+                    <button id="sendReminderButton" data-bs-toggle="modal"
+                            data-bs-target="#sendReminderConfirmationModal" class="btn btn-info">
+                        Send Reminder
+                    </button>
+                    <div class="modal fade" id="sendReminderConfirmationModal" tabindex="-1"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="#">
+                                    <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                                        <p>Are you sure you want to send a reminder?</p>
+                                    </div>
+                                    <div class="modal-footer d-flex justify-content-center">
+                                        <button type="button" class="btn w-50 m-0 border-end"
+                                                data-bs-dismiss="modal">No
+                                        </button>
+                                        <button type="submit" class="btn w-50 m-0" id="sendReminderOkBtn">Yes
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span id="successMessage" class="text-success text-end fst-italic"></span>
+                    <span id="errorMessage" class="text-danger text-end fst-italic"></span>
+                    <span id="resultMessage" class="text-success text-end fst-italic"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <span class="fst-italic" style="font-size: 0.85rem;">Created on <span id="createAt"></span>, last updated by <span></span> <span id="updateAt"></span></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Schedule title</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleTitle"></span>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <span class="fw-bold w-25">Job</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleJobTitle"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Candidate name</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleCandidateName"></span>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Interviewer</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleInterviewers"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Schedule Time</span>
+                    <div class="d-flex flex-column justify-content-between w-75 ms-3">
+                        <span id="scheduleTime"></span>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <span class="fw-bold w-25">Location</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleLocation"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <div class="d-flex justify-content-start w-75 ms-3">
+                        <div class="d-flex justify-content-start align-items-center ms-3">
+                            <span class="fw-bold me-2 w-25">From</span>
+                            <div class="d-flex flex-column w-25 ms-3">
+                                <span id="scheduleFrom"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-start align-items-center ms-3">
+                            <span class="fw-bold me-2 w-25">To</span>
+                            <div class="d-flex flex-column w-25 ms-3 time-wrap">
+                                <span id="scheduleTo"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Recruiter owner</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleRecruiterOwner"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-end align-items-center">
+                    <span class="fw-bold w-25">Notes</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleNotes"></span>
+                    </div>
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Meeting ID</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleMeetingId"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-end align-items-center">
+
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Result</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleResult"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-end align-items-center">
+
+                </div>
+                <div class="col-6 d-flex justify-content-between align-items-center">
+                    <span class="fw-bold w-25">Status</span>
+                    <div class="d-flex flex-column w-75 ms-3">
+                        <span id="scheduleStatus"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="d-flex justify-content-center mt-5">
+                    <button type="button" class="btn btn-secondary" id="scheduleEditButton">Edit</button>
+                    <button type="button" class="btn btn-secondary" id="scheduleSubmitResultButton">Submit Result</button>
+                    <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

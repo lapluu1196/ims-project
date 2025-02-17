@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Job Detail</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/jobs}">Job List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">View detail
+                            job</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4 userBoardContent" id="userDetail">
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <span class="fst-italic" style="font-size: 0.85rem;">Created on <span id="jobCreateAt"></span>, last updated by <span></span> <span id="jobUpdateAt"></span></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Job title</span>
+                    <span class="w-75" id="jobTitle"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Skills</span>
+                    <span class="w-75" id="jobSkills"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Start Date</span>
+                    <span class="w-75" id="startDate"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">End Date</span>
+                    <span class="w-75" id="endDate"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Salary Range</span>
+                    <span class="w-75">From: <span id="salaryRangeFrom"></span> &emsp;&emsp;&emsp;&emsp; To: <span id="salaryRangeTo"></span></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Benefits</span>
+                    <span class="w-75" id="jobBenefits"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Working address</span>
+                    <span class="w-75" id="workingAddress"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Level</span>
+                    <span class="w-75" id="jobLevel"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Status</span>
+                    <span class="w-75" id="jobStatus"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Description</span>
+                    <span class="w-75" id="jobDescription"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center my-5">
+                <button type="button" class="btn btn-secondary" id="jobEditButton">Edit</button>
+                <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

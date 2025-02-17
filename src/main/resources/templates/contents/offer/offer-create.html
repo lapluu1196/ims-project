@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Add new offer</title>
+    <script src="/js/offerScript.js"></script>
+    <script th:inline="javascript">
+        window.onload = function () {
+            const skillsSelectTag = document.getElementById('skillsSelectTag');
+            const benefitsSelectTag = document.getElementById('benefitsSelectTag');
+            const levelsSelectTag = document.getElementById('levelsSelectTag');
+
+            if (skillsSelectTag) {
+                const multipleSkillSelect = new Choices(skillsSelectTag, {
+                    removeItemButton: true,
+                    maxItemCount: 5,
+                    searchResultLimit: 5,
+                    renderChoiceLimit: 5
+                });
+
+                var selectedSkills = /*[[${requiredSkillList}]]*/;
+
+                if (selectedSkills && Array.isArray(selectedSkills)) {
+                    selectedSkills.forEach(skill => {
+                        multipleSkillSelect.setChoiceByValue(skill);
+                    });
+                }
+            }
+
+            if (benefitsSelectTag) {
+                const multipleBenefitsSelect = new Choices(benefitsSelectTag, {
+                    removeItemButton: true,
+                    maxItemCount: 5,
+                    searchResultLimit: 5,
+                    renderChoiceLimit: 5
+                });
+
+                var selectedBenefits = /*[[${benefitList}]]*/;
+
+                if (selectedBenefits && Array.isArray(selectedBenefits)) {
+                    selectedBenefits.forEach(benefit => {
+                        multipleBenefitsSelect.setChoiceByValue(benefit);
+                    });
+                }
+            }
+
+            if (levelsSelectTag) {
+                const multipleLevelsSelect = new Choices(levelsSelectTag, {
+                    removeItemButton: true,
+                    maxItemCount: 5,
+                    searchResultLimit: 5,
+                    renderChoiceLimit: 5
+                });
+
+                var selectedLevels = /*[[${levelList}]]*/;
+
+                if (selectedLevels && Array.isArray(selectedLevels)) {
+                    selectedLevels.forEach(skill => {
+                        multipleLevelsSelect.setChoiceByValue(skill);
+                    });
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/offers}">Offer
+                            List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">Create
+                            offer</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4" id="createUserForm">
+            <form th:action="@{/offers/create}" method="post" th:object="${offer}" enctype="multipart/form-data">
+                <div th:if="${#fields.hasGlobalErrors()}" class="row d-flex justify-content-between mb-3">
+                    <ul>
+                        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="offerTitle" class="w-25">Offer title <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('offerTitle')}" th:errors="*{offerTitle}"
+                                  class="invalid-input-user text-danger"></span>
+                            <input type="text" class="form-control" placeholder="Type a title..." id="offerTitle"
+                                   th:field="*{offerTitle}">
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="skillsSelectTag" class="w-25">Skill <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('requiredSkills')}" th:errors="*{requiredSkills}"
+                                  class="invalid-input-user text-danger"></span>
+                            <select name="requiredSkills" id="skillsSelectTag" th:field="*{requiredSkills}" multiple>
+                                <option value="Java">Java</option>
+                                <option value="Nodejs">Nodejs</option>
+                                <option value=".net">.net</option>
+                                <option value="C++">C++</option>
+                                <option value="Business analysis">Business analysis</option>
+                                <option value="Communication">Communication</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="startDate" class="w-25">Start Date <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"
+                              class="invalid-input-user text-danger"></span>
+                            <input type="date" class="form-control" id="startDate" th:field="*{startDate}">
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="endDate" class="w-25">End Date <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"
+                                  class="invalid-input-user text-danger"></span>
+                            <input type="date" class="form-control" id="endDate" th:field="*{endDate}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label class="w-25">Salary Range</label>
+                        <div class="d-flex justify-content-between w-75">
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <span th:if="${#fields.hasErrors('salaryRangeFrom')}" th:errors="*{salaryRangeFrom}"
+                                      class="invalid-input-user text-danger"></span>
+                                <label for="salaryRangeFrom" class="me-2">From</label>
+                                <input type="number" min="0" class="form-control" id="salaryRangeFrom"
+                                       th:field="*{salaryRangeFrom}">
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <span th:if="${#fields.hasErrors('salaryRangeTo')}" th:errors="*{salaryRangeTo}"
+                                      class="invalid-input-user text-danger"></span>
+                                <label for="salaryRangeTo" class="me-2">To</label>
+                                <input type="number" min="0" class="form-control" id="salaryRangeTo"
+                                       th:field="*{salaryRangeTo}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="benefitsSelectTag" class="w-25">Benefits <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('benefits')}" th:errors="*{benefits}"
+                                  class="invalid-input-user text-danger"></span>
+                            <select name="skills" id="benefitsSelectTag" th:field="*{benefits}" multiple>
+                                <option value="Launch">Launch</option>
+                                <option value="25-day leave">25-day leave</option>
+                                <option value="Healthcare insurance">Healthcare insurance</option>
+                                <option value="Hybrid working">Hybrid working</option>
+                                <option value="Travel">Travel</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="workingAddress" class="w-25">Working address</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('workingAddress')}" th:errors="*{workingAddress}"
+                                  class="invalid-input-user text-danger"></span>
+                            <input type="text" class="form-control" name="workingAddress" id="workingAddress"
+                                   placeholder="Type an address"
+                                   th:field="*{workingAddress}">
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="levelsSelectTag" class="w-25">Level <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('level')}" th:errors="*{level}"
+                                  class="invalid-input-user text-danger"></span>
+                            <select name="level" id="levelsSelectTag" th:field="*{level}" multiple>
+                                <option value="Fresher">Fresher</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Senior">Senior</option>
+                                <option value="Leader">Leader</option>
+                                <option value="Manager">Manager</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="description" class="w-25">Description</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:if="${#fields.hasErrors('description')}"
+                                  th:errors="*{description}"
+                                  class="invalid-input-user text-danger"></span>
+                            <textarea name="description" id="description" class="form-control"
+                                      placeholder="Type description" cols="30" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-center mt-5">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

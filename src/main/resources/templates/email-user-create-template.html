@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Notification</title>
+</head>
+<body>
+    <h3>This email from IMS system,</h3>
+    <p>Your account has been created. Please user the following credential to login:</p>
+    <ul>
+        <li th:text="'Username: ' + ${username}"></li>
+        <li th:text="'Password: ' + ${password}"></li>
+    </ul>
+    <p>If anything wrong, please reach-out recruiter (offer recruiter owner account). We are so sorry for this inconvenience.</p>
+    <p>Thanks & Regards!</p>
+    <p>IMS Team.</p>
+</body>
+</html>

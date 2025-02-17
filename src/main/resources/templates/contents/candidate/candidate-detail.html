@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Candidate Detail</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/candidates}">Candidate List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">View detail
+                            candidate</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4 userBoardContent" id="userDetail">
+            <div class="row mb-2">
+                <div id="statusButtonContainer" class="col-12 d-flex justify-content-end">
+                    <button id="banCandidateButton" data-bs-toggle="modal"
+                            data-bs-target="#candidateBanConfirmationModal" class="btn">
+                    </button>
+                    <div class="modal fade" id="candidateBanConfirmationModal" tabindex="-1"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                                    <p>Are you sure you want to delete this candidate?</p>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center">
+                                    <button type="button" class="btn w-50 m-0 border-end"
+                                            data-bs-dismiss="modal">No
+                                    </button>
+                                    <button type="submit" class="btn w-50 m-0" id="candidateBanOkBtn">Yes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold">I. Personal information</span>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                    <span class="fst-italic" style="font-size: 0.85rem;">Created on <span></span>, last updated by <span></span> <span></span></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Full name</span>
+                    <span class="w-25" id="candidateFullName"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Email</span>
+                    <span class="w-25" id="candidateEmail"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">D.O.B</span>
+                    <span class="w-25" id="candidateDob"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Address</span>
+                    <span class="w-25" id="candidateAddress"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Phone number</span>
+                    <span class="w-25" id="candidatePhoneNumber"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Gender</span>
+                    <span class="w-25" id="candidateGender"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold">II. Professional information</span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">CV</span>
+                    <a role="button" id="downloadCvButton" class="text-decoration-underline w-75" download>
+                        <span id="candidateCvFileName"></span>
+                        <svg style="rotate: 45deg" class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8v8a5 5 0 1 0 10 0V6.5a3.5 3.5 0 1 0-7 0V15a2 2 0 0 0 4 0V8"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Status</span>
+                    <span class="w-25" id="candidateStatus"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Current position</span>
+                    <span class="w-25" id="candidateCurrentPosition"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Year of experience</span>
+                    <span class="w-25" id="candidateYearOfExperience"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Skills</span>
+                    <span class="w-25" id="candidateSkills"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Highest level</span>
+                    <span class="w-25" id="candidateHighestLevel"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-between mb-4">
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Recruiter</span>
+                    <span class="w-25" id="candidateRecruiter"></span>
+                </div>
+                <div class="col-6 d-flex justify-content-start">
+                    <span class="fw-bold w-25">Note</span>
+                    <span class="w-25" id="candidateNote"></span>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center my-5">
+                <button type="button" class="btn btn-secondary" id="candidateEditButton">Edit</button>
+                <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

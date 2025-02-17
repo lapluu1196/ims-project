@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+::after,
+::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+#header {
+    padding: 10px 0;
+    background-color: #F6F9ED;
+}
+
+#header img {
+    width: 40px;
+}
+
+#authBoard {
+    background-color: #E6E6E6;
+}
+
+/* Login Page Styles */
+#loginForm {
+    background-color: #EEF1DF;
+    padding: 3rem 2rem;
+}
+
+#loginForm a {
+    margin-bottom: 0.5rem;
+}
+
+#formLoginHeader img {
+    width: 50px;
+}
+
+/* Login Page Styles */
+#loginForm, #forgotPasswordContent {
+    background-color: #EEF1DF;
+    padding: 3rem 2rem;
+}
+
+#loginForm {
+    width: 500px;
+}
+
+#formLoginHeader img, #forgotPasswordContent img {
+    width: 50px;
+}
+
+/* Forgot Password Page Styles */
+#resetPasswordForm {
+    width: 500px;
+}
+
+#resetPasswordForm input.form-control {
+    width: 65%;
+}
+
+#resetPasswordForm #togglePassword {
+    cursor: pointer;
+    float: right;
+    margin-left: -112px;
+    right: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+#resetPasswordForm #toggleConfirmPassword {
+    cursor: pointer;
+    float: right;
+    margin-left: -45px;
+    right: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+#togglePassword {
+    cursor: pointer;
+    float: right;
+    margin-left: -42px;
+    margin-top: 0;
+    right: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Media Queries */
+@media (max-width: 564px) {
+
+    #loginForm, #resetPasswordForm, #resetPasswordForm {
+        width: 100%;
+    }
+
+    #togglePassword {
+        margin-left: -11%;
+    }
+
+    #resetPasswordForm input.form-control {
+        width: 60%;
+    }
+
+    #resetPasswordForm #togglePassword {
+        margin-left: -165px;
+    }
+
+    #resetPasswordForm #toggleConfirmPassword {
+        margin-left: -96px;
+    }
+
+}

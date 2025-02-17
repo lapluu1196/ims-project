@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Notification</title>
+</head>
+<body>
+    <p>This email is from IMS System,</p>
+    <p>You have an interview schedule TODAY at <span th:text="${scheduleFrom}"></span> to <span th:text="${scheduleTo}"></span>.</p>
+    <p>With Candidate <span th:text="${candidateName}"></span> position <span th:text="${candidatePosition}"></span>, the CV is attached with this no-reply-email</p>
+    <p>If anything wrong, please refer recruiter <span th:text="${recruiterUsername}"></span> or visit</p>
+    <span th:text="${interviewDetailUrl}"></span>
+    <p>Please join interview room ID: </p>
+    <span th:text="${meetingId}"></span>
+    <p>Thanks & Regards!</p>
+    <p>IMS Team.</p>
+</body>
+</html>

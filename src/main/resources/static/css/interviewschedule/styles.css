@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.ms-n5 {
+    margin-left: -40px;
+}
+
+.option-bg {
+    background-color: #F0F3FB;
+}
+
+.btn-search {
+    background-color: #D9D9D9;
+}
+
+.table thead th {
+    background-color: #F2F2EE !important;
+    /* Chỉnh màu nền theo ý bạn */
+}
+
+
+body>div>div.container-fluid.px-5>table>tbody>tr>td:nth-child(odd) {
+    background-color: #F1F6FB;
+}
+
+body>div>div.container-fluid.px-5>table>tbody>tr>td:nth-child(even) {
+    background-color: #EBEFF3;
+}
+
+body>div>div.container-fluid.px-5>table>tbody>tr:nth-child(even)>td:nth-child(odd) {
+    background-color: #EBEFF3;
+}
+
+
+
+body>div>div.container-fluid.px-5>table>tbody>tr>td:nth-child(4) {
+    max-width: 8vw;
+}
+
+.table td, .table th{
+    /* display: flex; */
+    vertical-align: center;
+    text-align: center;
+}
+
+#pagination a {
+    background-color: transparent;
+    border: none;
+}
+
+/* View add */
+.mult-select-tag  .btn-container {
+    border: none!important;
+    padding: 0;
+    padding-right: 12px;
+    padding-bottom: 7px;
+    
+
+}
+
+.mult-select-tag  .btn-container svg {
+    width: 20px;
+    height: 20px;
+    stroke: #3C4247;
+
+
+}
+
+.mult-select-tag  .item-container, .mult-select-tag .item-label{
+    background-color: #D9D9D9!important;
+    color: black!important;
+
+}
+
+.mult-select-tag  .item-container{
+    border-radius: 0;
+    border: none!important;
+
+}
+
+/* Hiệu ứng thông báo trượt từ phải vào */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: -300px; /* Bắt đầu ngoài màn hình */
+    z-index: 9999;
+    transition: right 0.5s ease-in-out; /* Trượt vào trong */
+}
+
+.alert.show {
+    right: 20px; /* Vị trí cuối khi thông báo hiển thị */
+}
+
+.alert.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out; /* Hiệu ứng mờ dần */
+}
+
+.table tr td {
+    vertical-align: middle;
+}

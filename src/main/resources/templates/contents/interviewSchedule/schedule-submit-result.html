@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-GB" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Submit result interview schedule</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/interview-schedules}">Interview
+                            Schedule
+                            List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">Submit result interview schedule</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4" id="createUserForm">
+            <form th:action="@{/interview-schedules/submit-result/{id}(id=${interviewSchedule.scheduleId})}"
+                  method="post">
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold w-25">Schedule title</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.scheduleTitle}"></span>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <span class="fw-bold w-25">Job</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.jobTitle}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold w-25">Candidate name</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.candidateName}"></span>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold w-25">Interviewer</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.interviewersUsernameList}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold w-25">Schedule Time</span>
+                        <div class="d-flex flex-column justify-content-between w-75 ms-3">
+                            <span th:text="${#temporals.format(interviewSchedule.scheduleDate, 'dd/MM/yyyy')}"></span>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <span class="fw-bold w-25">Location</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.location}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <div class="d-flex justify-content-start w-75 ms-3">
+                            <div class="d-flex justify-content-start align-items-center ms-3">
+                                <span class="fw-bold me-2 w-25">From</span>
+                                <div class="d-flex flex-column w-25 ms-3">
+                                    <span th:text="${interviewSchedule.scheduleFrom}"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-start align-items-center ms-3">
+                                <span class="fw-bold me-2 w-25">To</span>
+                                <div class="d-flex flex-column w-25 ms-3 time-wrap">
+                                    <span th:text="${interviewSchedule.scheduleTo}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <span class="fw-bold w-25">Recruiter owner</span>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span th:text="${interviewSchedule.recruiterOwner}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="notes" class="fw-bold w-25">Notes</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                        <textarea name="notes" id="notes" class="form-control" cols="30" rows="4"
+                                  placeholder="Type schedule note..." th:value="${interviewSchedule.notes}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex flex-column justify-content-start align-items-center">
+                        <div class="col-6 d-flex justify-content-end align-items-center w-100 mb-4">
+                            <span class="fw-bold w-25">Meeting ID</span>
+                            <div class="d-flex flex-column w-75 ms-3">
+                                <span th:text="${interviewSchedule.meetingId}"></span>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center w-100 mb-4">
+                            <label for="result" class="fw-bold w-25">Result</label>
+                            <div class="d-flex flex-column w-75 ms-3">
+                                <select name="result" id="result" class="form-select">
+                                    <option value="">Select result</option>
+                                    <option value="Passed" th:selected="${interviewSchedule.result} == 'Passed'">Passed</option>
+                                    <option value="Failed" th:selected="${interviewSchedule.result} == 'Failed'">Failed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6 d-flex justify-content-end align-items-center w-100 mb-4">
+                            <span class="fw-bold w-25">Status</span>
+                            <div class="d-flex flex-column w-75 ms-3">
+                                <span th:text="${interviewSchedule.status}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-4">
+                    <div class="d-flex justify-content-center mt-5">
+                        <button type="submit" class="btn btn-secondary">Submit Result</button>
+                        <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

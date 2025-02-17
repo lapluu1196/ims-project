@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en-GB" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Add new interview schedule</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <ul class="nav justify-content-start fs-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline" th:href="@{/interview-schedules}">Interview
+                            Schedule
+                            List</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                             xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="m9 5 7 7-7 7"/>
+                        </svg>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-reset text-decoration-underline disabled" href="#" aria-disabled="true">New
+                            Interview Schedule</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mt-3 py-4" id="createUserForm">
+            <form action="#" method="post">
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="scheduleTitle" class="w-25">Schedule title <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <input type="text" class="form-control" placeholder="Type a title..." id="scheduleTitle">
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="jobSelect" class="w-25">Job <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <select name="job" id="jobSelect" class="form-select">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="candidateId" class="w-25">Candidate name <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <select name="candidateId" id="candidateId" class="form-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="interviewersSelectTag" class="w-25">Interviewer <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <select name="interviewersIdList" id="interviewersSelectTag" class="form-select interviewer-select" multiple>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="scheduleDate" class="w-25">Schedule Time <span style="color: red">*</span></label>
+                        <div class="d-flex flex-column justify-content-between w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <input type="date" class="form-control" id="scheduleDate">
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="location" class="w-25">Location</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <input type="text" class="form-control" name="location" id="location"
+                                   placeholder="Type an address">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <div class="d-flex flex-lg-row flex-column w-75 ms-3">
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <label for="scheduleFrom" class="me-2 w-25">From</label>
+                                <div class="d-flex flex-column w-75 ms-3">
+                                    <div class="time-wrap">
+                                        <input type="time" class="form-control w-75" id="scheduleFrom" style="background-color: white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                             class="bi bi-clock time-icon" viewBox="0 0 16 16">
+                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <label for="scheduleTo" class="me-2 w-25">To</label>
+                                <div class="d-flex flex-column w-75 ms-3 time-wrap">
+                                    <div class="time-wrap">
+                                        <input type="time" class="form-control w-75" id="scheduleTo" style="background-color: white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                                             class="bi bi-clock time-icon" viewBox="0 0 16 16">
+                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="recruiterOwner" class="w-25">Recruiter owner <span
+                                style="color: red">*</span></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <select name="recruiterOwner" id="recruiterOwner" class="form-select">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <div class="d-flex flex-lg-row flex-column w-75 ms-3">
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <div class="d-flex flex-column w-75 ms-3">
+                                    <span class="invalid-input-user text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center w-75 ms-3">
+                                <div class="d-flex flex-column w-75 ms-3 time-wrap">
+                                    <span class="invalid-input-user text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-start align-items-center">
+
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="recruiterOwner" class="w-25"></label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <button type="button" class="btn text-decoration-underline w-25">Assign me</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="col-6 d-flex justify-content-end align-items-center">
+                        <label for="notes" class="w-25">Notes</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <textarea name="notes" id="notes" class="form-control" cols="30" rows="3"
+                                      placeholder="Type schedule note..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6 d-flex justify-content-between align-items-center">
+                        <label for="meetingId" class="w-25">Meeting ID</label>
+                        <div class="d-flex flex-column w-75 ms-3">
+                            <span class="invalid-input-user text-danger"></span>
+                            <input type="text" name="meetingId" id="meetingId" class="form-control"
+                                   placeholder="Type meeting ID...">
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-flex justify-content-between mb-3">
+                    <div class="d-flex justify-content-center mt-5">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <button type="button" class="btn btn-secondary ms-5" id="cancelButton">Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

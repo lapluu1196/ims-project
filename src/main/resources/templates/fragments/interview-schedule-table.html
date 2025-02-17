@@ -1,0 +1,100 @@
+<div class="container-fluid mt-2" style="max-height: 400px;" th:fragment="interviewScheduleTable" id="interviewScheduleTable">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Candidate Name</th>
+                <th scope="col">Interviewer</th>
+                <th scope="col">Schedule</th>
+                <th scope="col">Result</th>
+                <th scope="col">Status</th>
+                <th scope="col">Job</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody id="interviewScheduleList">
+            <tr th:if="${message}">
+                <td colspan="8" class="text-start ">No item matches with your search data. Please try again.
+                </td>
+            </tr>
+            <tr th:each="interviewSchedule : ${interviewScheduleDTOs}">
+                <td th:text="${interviewSchedule.interviewTitle}"></td>
+                <td th:text="${interviewSchedule.candidateName}"></td>
+                <td>
+                    <ul>
+                        <li th:each="interviewer : ${interviewSchedule.interviewers}"
+                            th:text="${interviewer.fullName}"></li>
+                    </ul>
+                </td>
+                <td
+                    th:text="${interviewSchedule.scheduleDate + ' ' + interviewSchedule.scheduleFrom + ' - ' + interviewSchedule.scheduleTo}">
+                </td>
+                <td th:text="${interviewSchedule.result}"></td>
+                <td th:text="${interviewSchedule.status}"></td>
+                <td th:text="${interviewSchedule.jobTitle}"></td>
+                <td>
+                    <button aria-label="view" type="button" class="border-0 bg-transparent">
+                        <a class="text-dark text-decoration-none"
+                            th:href="@{/interview-schedule/scheduleDetail/{id}(id=${interviewSchedule.scheduleId})}">
+                            <i class="far fa-eye"></i>
+                        </a>
+                    </button>
+                    <button aria-label="edit" type="button" class="border-0 bg-transparent"  sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Recruiter')">
+                        <a class="text-dark text-decoration-none"
+                            th:href="@{/interview-schedule/edit/{id}(id=${interviewSchedule.scheduleId})}">
+                            <i class="far fa-edit ms-2"></i>
+                        </a>
+                    </button>
+
+                    <button aria-label="edit" type="button" class="border-0 bg-transparent"  sec:authorize="hasAuthority('Interviewer')">
+                        <a class="text-dark text-decoration-none"
+                            th:href="@{/interview-schedule/edit/{id}(id=${interviewSchedule.scheduleId})}">
+                            <i class="far fa-hand-pointer"></i>
+                        </a>
+                    </button>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <!-- Pagination -->
+    <div class="row" id="pagination">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-end align-items-center">
+                <li class="page-item">
+                    <span th:text="'10/' + ${totalUsers} + ' rows'"></span>
+                </li>
+                <li class="page-item">
+                    <a class="btn page-link" role="button"
+                        th:href="@{/interview-schedule/index(keyword=${keyword}, page=${currentPage - 1})}"
+                        th:classappend="${currentPage > 0} ? '' : 'disabled'"
+                        th:attr="aria-disabled=${currentPage > 0} ? 'false' : 'true'">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m15 19-7-7 7-7" />
+                        </svg>
+
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="btn page-link" role="button"
+                        th:href="@{/interview-schedule/index(keyword=${keyword}, page=${currentPage + 1})}"
+                        th:classappend="${currentPage + 1 < totalPages} ? '' : 'disabled'"
+                        th:attr="aria-disabled=${currentPage + 1 < totalPages} ? 'false' : 'true'">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m9 5 7 7-7 7" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- END Pagination -->
+
+</div>

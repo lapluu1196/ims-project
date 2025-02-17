@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/mainLayout}">
+<head>
+    <meta charset="UTF-8">
+    <title layout:fragment="title">Offer List</title>
+</head>
+<body>
+<div id="mainBoard" layout:fragment="content">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>Offer</h4>
+            </div>
+        </div>
+
+        <!-- Search form and Sort by role -->
+        <div class="row d-flex justify-content-start">
+            <div id="searchCandidateForm" class="list-form-search">
+                <form action="#" class="row g-3">
+                    <div class="col-auto">
+                        <input class="form-control" type="search" name="search" id="searchCandidate"
+                               aria-label="Recipient's username" aria-describedby="searchIcon" placeholder="Search"
+                               th:value="${keyword}">
+                        <img src="/images/search.png" alt="search-icon" id="searchIcon">
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select" name="status" id="filterByDepartment" th:value="${status}">
+                            <option value="">Status</option>
+                            <option value="Draft" th:selected="${status} == 'Draft'">Draft</option>
+                            <option value="Open" th:selected="${status} == 'Open'">Open</option>
+                            <option value="Closed" th:selected="${status} == 'Closed'">Closed</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <select class="form-select" name="status" id="filterByStatus" th:value="${status}">
+                            <option value="">Status</option>
+                            <option value="Draft" th:selected="${status} == 'Draft'">Draft</option>
+                            <option value="Open" th:selected="${status} == 'Open'">Open</option>
+                            <option value="Closed" th:selected="${status} == 'Closed'">Closed</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-secondary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-6 d-flex justify-content-end w-100 pe-4 pb-4"
+             sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Recruiter')">
+            <a th:href="@{/offers/create}" id="addNewButton" class="btn btn-secondary">
+                Add new
+            </a>
+            <a id="importOfferButton" class="btn btn-secondary ms-3">
+                Import
+            </a>
+        </div>
+        <!-- END Search form and Sort by role -->
+        <div class="row">
+            <span th:if="${message}" th:text="${message}" class="text-success text-end fst-italic"></span>
+            <span th:if="${error}" th:text="${error}" class="text-danger text-end fst-italic"></span>
+        </div>
+        <!-- User list table -->
+        <div class="row table-data" id="candidateTable">
+            <div class="col-12 table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col">Offer Title</th>
+                        <th scope="col">Required Skills</th>
+                        <th scope="col">Start date</th>
+                        <th scope="col">End date</th>
+                        <th scope="col">Level</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="candidateList" class="table-body-data">
+                    <tr th:each="offer : ${offers}">
+                        <td th:text="${offer.candidateName}"></td>
+                        <td th:text="${offer.candidateEmail}" style="background-color: #EBEFF3"></td>
+                        <td th:text="${offer.approverName}"></td>
+                        <td th:text="${offer.department}"
+                            style="background-color: #EBEFF3"></td>
+                        <td th:text="${offer.notes}"></td>
+                        <td th:text="${offer.status}" style="background-color: #EBEFF3"></td>
+                        <td class="d-flex justify-content-center">
+                            <a class="btn" th:href="@{/offers/detail/{id}(id=${offer.offerId})}">
+                                <img src="/images/visible.png" alt="info icon">
+                            </a>
+                            <a th:href="@{/offers/edit/{id}(id=${offer.offerId})}" class="btn"
+                               sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Recruiter')">
+                                <img src="/images/edit-button.png" alt="edit icon">
+                            </a>
+                            <button type="submit" class="btn action-delete-btn" id="offerDeleteBtn" data-bs-toggle="modal"
+                                    data-bs-target="#offerDeleteConfirmationModal"
+                                    sec:authorize="hasAnyAuthority('Admin', 'Manager', 'Recruiter')">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                </svg>
+                            </button>
+                            <div class="modal fade" id="offerDeleteConfirmationModal" tabindex="-1"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <form th:action="@{/offers/delete/{id}(id=${offer.offerId})}" method="post">
+                                            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                                                <p>Are you sure you want to delete this offer?</p>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-center">
+                                                <button type="button" class="btn w-50 m-0 border-end"
+                                                        data-bs-dismiss="modal">No
+                                                </button>
+                                                <button type="submit" class="btn w-50 m-0" id="offerDeleteOkBtn">Yes
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="row" id="pagination">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-end align-items-center">
+                        <li class="page-item">
+                            <span th:text="${(currentPage + 1) * 10 < totalOffers} ? ${(currentPage + 1) * 10} + '/' + ${totalOffers} + ' rows' : ${totalOffers} + '/' + ${totalOffers} + ' rows'"></span>
+                        </li>
+                        <li class="page-item">
+                            <a class="btn page-link" role="button"
+                               th:href="@{/offers(search=${keyword}, status=${status}, page=${currentPage - 1})}"
+                               th:classappend="${currentPage > 0} ? '' : 'disabled'"
+                               th:attr="aria-disabled=${currentPage > 0} ? 'false' : 'true'">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m15 19-7-7 7-7"/>
+                                </svg>
+
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="btn page-link" role="button"
+                               th:href="@{/offers(search=${keyword}, status=${status}, page=${currentPage + 1})}"
+                               th:classappend="${currentPage + 1 < totalPages} ? '' : 'disabled'"
+                               th:attr="aria-disabled=${currentPage + 1 < totalPages} ? 'false' : 'true'">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                     xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m9 5 7 7-7 7"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- END Pagination -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

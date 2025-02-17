@@ -1,0 +1,64 @@
+<div class="row" id="userTable" th:fragment="userTable">
+    <div class="col-12">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone No.</th>
+                <th scope="col">Role</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody id="userList">
+            <tr th:each="user : ${userDTOs}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}" style="background-color: #EBEFF3"></td>
+                <td th:text="${user.phoneNumber}"></td>
+                <td th:text="${user.role}" style="background-color: #EBEFF3"></td>
+                <td th:text="${user.status}"></td>
+                <td style="background-color: #EBEFF3">
+                    <a th:href="@{/users/detail/{id}(id=${user.userId})}" class="btn">
+                        <img src="/images/visible.png" alt="info icon">
+                    </a>
+                    <a th:href="@{/users/edit/{id}(id=${user.userId})}" class="btn">
+                        <img src="/images/edit-button.png" alt="edit icon">
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="row" id="pagination">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-end align-items-center">
+                <li class="page-item">
+                    <span th:text="${(currentPage + 1) * 10 < totalUsers} ? ${(currentPage + 1) * 10} + '/' + ${totalUsers} + ' rows' : ${totalUsers} + '/' + ${totalUsers} + ' rows'"></span>
+                </li>
+                <li class="page-item">
+                    <a class="btn page-link" role="button" th:href="@{/users(search=${keyword}, role=${role}, page=${currentPage - 1})}"
+                       th:classappend="${currentPage > 0} ? '' : 'disabled'"
+                       th:attr="aria-disabled=${currentPage > 0} ? 'false' : 'true'">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                        </svg>
+
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="btn page-link" role="button" th:href="@{/users(search=${keyword}, role=${role}, page=${currentPage + 1})}"
+                       th:classappend="${currentPage + 1 < totalPages} ? '' : 'disabled'"
+                       th:attr="aria-disabled=${currentPage + 1 < totalPages} ? 'false' : 'true'">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- END Pagination -->
+</div>
