@@ -1,9 +1,10 @@
 package com.dinhlap.ims.controllers.candidate;
 
-import com.dinhlap.ims.dtos.api.ApiResponse;
 import com.dinhlap.ims.dtos.candidate.CandidateDTO;
-import com.dinhlap.ims.dtos.user.UserDTO;
 import com.dinhlap.ims.services.CandidateService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -36,11 +37,20 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Tag(name = "Candidate", description = "APIs for managing candidates")
 @RequestMapping("/api/candidates")
 public class CandidateApiController {
     @Autowired
     private CandidateService candidateService;
 
+    @Operation(
+            summary = "Get list of candidates",
+            description = "Retrieve a paginated list of candidates based on search and status filters.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved candidates"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
     @GetMapping
     public ResponseEntity<Page<CandidateDTO>> getCandidates(@RequestParam(required = false) String search,
                                                             @RequestParam(required = false) String status,
@@ -56,6 +66,15 @@ public class CandidateApiController {
         }
     }
 
+    @Operation(
+            summary = "Create a new candidate",
+            description = "Create a new candidate and upload their CV file.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Candidate created successfully"),
+                    @ApiResponse(responseCode = "400", description = "Invalid request"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> createCandidate(@Valid @RequestPart CandidateDTO candidateDTO,
                                                   @RequestPart("cv") MultipartFile cvFile) {
@@ -93,15 +112,29 @@ public class CandidateApiController {
         return ResponseEntity.badRequest().body("Candidate not created");
     }
 
+    @Operation(
+            summary = "Get candidate by ID",
+            description = "Retrieve details of a specific candidate.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved candidate"),
+                    @ApiResponse(responseCode = "404", description = "Candidate not found")
+            }
+    )
     @GetMapping("/{id}")
-    public ApiResponse<CandidateDTO> getCandidate(@PathVariable("id") Long id) {
-        ApiResponse<CandidateDTO> apiResponse = new ApiResponse<>();
+    public ResponseEntity<CandidateDTO> getCandidate(@PathVariable("id") Long id) {
 
-        apiResponse.setResult(candidateService.findById(id));
-
-        return apiResponse;
+        return ResponseEntity.ok(candidateService.findById(id));
     }
 
+    @Operation(
+            summary = "Update candidate",
+            description = "Update an existing candidate's information.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Candidate updated successfully"),
+                    @ApiResponse(responseCode = "404", description = "Candidate not found"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
     @PutMapping("/{id}")
     public ResponseEntity<String> updateCandidate(@PathVariable("id") Long id,
                                                   @Valid @RequestBody CandidateDTO candidateDTO) {
@@ -114,6 +147,14 @@ public class CandidateApiController {
         }
     }
 
+    @Operation(
+            summary = "Delete candidate",
+            description = "Remove a candidate from the system.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Candidate deleted successfully"),
+                    @ApiResponse(responseCode = "404", description = "Candidate not found")
+            }
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCandidate(@PathVariable("id") Long id) {
         try {
@@ -125,6 +166,14 @@ public class CandidateApiController {
         }
     }
 
+    @Operation(
+            summary = "Ban a candidate",
+            description = "Mark a candidate as banned.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Candidate banned successfully"),
+                    @ApiResponse(responseCode = "404", description = "Candidate not found")
+            }
+    )
     @PutMapping("/banCandidate")
     public ResponseEntity<String> banCandidate(@RequestParam("candidateId") Long candidateId) {
         String result = candidateService.banCandidate(candidateId);
@@ -135,6 +184,14 @@ public class CandidateApiController {
         }
     }
 
+    @Operation(
+            summary = "Download CV file",
+            description = "Download a candidate's CV file.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "File downloaded successfully"),
+                    @ApiResponse(responseCode = "404", description = "File not found")
+            }
+    )
     @GetMapping("/downloadCv")
     public ResponseEntity<Resource> downloadCv(@RequestParam("candidateId") Long candidateId) {
         CandidateDTO candidateDTO = candidateService.findById(candidateId);
@@ -165,6 +222,14 @@ public class CandidateApiController {
                 .body(resource);
     }
 
+    @Operation(
+            summary = "Get open candidates",
+            description = "Retrieve a list of candidates with status 'Open'.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved open candidates"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
     @GetMapping("/getOpenCandidates")
     public ResponseEntity<List<CandidateDTO>> getOpenCandidates() {
         try {
@@ -176,6 +241,14 @@ public class CandidateApiController {
         }
     }
 
+    @Operation(
+            summary = "Get candidates for schedule edit",
+            description = "Retrieve candidates who are open for schedule editing.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Successfully retrieved candidates"),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            }
+    )
     @GetMapping("/getCandidatesForScheduleEdit")
     public ResponseEntity<List<CandidateDTO>> getCandidatesForScheduleEdit(@RequestParam Long candidateId) {
         try {

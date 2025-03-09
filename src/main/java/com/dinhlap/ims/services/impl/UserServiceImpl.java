@@ -421,4 +421,9 @@ public class UserServiceImpl implements UserService {
 
         return "Password has been updated failed!";
     }
+
+    @Override
+    public User loadUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
 }

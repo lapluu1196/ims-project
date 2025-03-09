@@ -1,44 +1,57 @@
 package com.dinhlap.ims.controllers.auth;
 
-import com.dinhlap.ims.dtos.api.ApiResponse;
-import com.dinhlap.ims.dtos.authentication.AuthenticationRequest;
-import com.dinhlap.ims.dtos.authentication.AuthenticationResponse;
-import com.dinhlap.ims.dtos.authentication.IntrospectRequest;
-import com.dinhlap.ims.dtos.authentication.IntrospectResponse;
+import com.dinhlap.ims.utils.JwtUtil;
 import com.dinhlap.ims.dtos.user.UserDTO;
-import com.dinhlap.ims.services.AuthenticationService;
+import com.dinhlap.ims.services.RefreshTokenService;
 import com.dinhlap.ims.services.UserService;
-import com.nimbusds.jose.JOSEException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "Authentication", description = "APIs for user authentication")
 @RequestMapping("/api/auth")
 public class AuthApiController {
 
-    UserService userService;
-
-    AuthenticationService authenticationService;
+    final AuthenticationManager authenticationManager;
+    final JwtUtil jwtUtil;
+    final RefreshTokenService refreshTokenService;
+    final UserService userService;
 
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
 
+    @Operation(
+            summary = "Forgot Password",
+            description = "Send a password reset link to the email address",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Password reset link sent successfully."),
+                    @ApiResponse(responseCode = "400", description = "The Email address doesn't exist. Please try again.")
+            }
+    )
     @PostMapping("/password/forgot")
     public ResponseEntity<String> forgotPassword(HttpServletRequest request, @RequestParam("email") String email) {
 
@@ -57,21 +70,77 @@ public class AuthApiController {
         return ResponseEntity.ok("We've sent an email with the link to reset your password.");
     }
 
-    @PostMapping("/token")
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        var result = authenticationService.authenticate(request);
+    @Operation(summary = "User Login", description = "Authenticate the user and return tokens.")
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.username,
+                        loginRequest.password
+                )
+        );
 
-        return ApiResponse.<AuthenticationResponse>builder()
-                .result(result)
-                .build();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String accessToken = jwtUtil.generateAccessToken(userDetails);
+        String refreshToken = jwtUtil.generateRefreshToken(userDetails);
+
+        refreshTokenService.saveRefreshToken(userDetails.getUsername(), refreshToken);
+
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 
-    @PostMapping("/introspect")
-    ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
-        var result = authenticationService.introspect(request);
+    @Operation(summary = "Refresh Token", description = "Get new access token using refresh token.")
+    @PostMapping("/refresh-token")
+    public ResponseEntity<?> refreshAccessToken(@RequestBody RefreshTokenRequest request) {
+        String username = jwtUtil.getUsernameFromToken(request.getRefreshToken());
+        String storedRefreshToken = refreshTokenService.getRefreshToken(username);
 
-        return ApiResponse.<IntrospectResponse>builder()
-                .result(result)
-                .build();
+        if (storedRefreshToken == null || !storedRefreshToken.equals(request.getRefreshToken())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token.");
+        }
+
+        UserDetails userDetails = (UserDetails) userService.loadUserByUsername(username);
+        String newAccessToken = jwtUtil.generateAccessToken(userDetails);
+
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, request.getRefreshToken()));
+    }
+
+    @Operation(summary = "Logout", description = "Logout the user and invalidate the refresh token.")
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token, @RequestParam String username) {
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        long expirationTime = jwtUtil.getExpirationMsFromToken(token);
+        if (expirationTime > 0) {
+            refreshTokenService.blacklistAccessToken(token, expirationTime);
+        }
+
+        refreshTokenService.deleteRefreshToken(username);
+        return ResponseEntity.ok("Logout successful.");
+    }
+
+
+    @Data
+    static class LoginRequest {
+        private String username;
+        private String password;
+    }
+
+    @Data
+    static class RefreshTokenRequest {
+        private String refreshToken;
+    }
+
+    @Data
+    static class AuthResponse {
+        private String accessToken;
+        private String refreshToken;
+
+        public AuthResponse(String accessToken, String refreshToken) {
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
+        }
     }
 }

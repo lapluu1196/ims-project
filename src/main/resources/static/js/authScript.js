@@ -1,4 +1,27 @@
 $(document).ready(function () {
+    $("#loginFormForm").on("submit", function(e) {
+        e.preventDefault();
+
+        const username = $("#username").val();
+        const password = $("#password").val();
+
+        $.ajax({
+            url: '/api/auth/login',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ username: username, password: password }),
+            dataType: 'json',
+            success: function(data, textStatus, xhr) {
+                localStorage.setItem('accessToken', data.jwt);
+                window.location.href = '/';
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                // Xử lý khi server trả về lỗi (4xx/5xx)
+                console.error('Login error:', xhr.status, xhr.responseText);
+            }
+        });
+    });
+
     const togglePassword = $('#togglePassword');
     const password = $('#password');
     const toggleConfirmPassword = $('#toggleConfirmPassword');

@@ -1,6 +1,7 @@
 package com.dinhlap.ims.services;
 
 import com.dinhlap.ims.dtos.user.UserDTO;
+import com.dinhlap.ims.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -36,4 +37,5 @@ public interface UserService {
 
     String updatePassword(Long id, String password);
 
+    User loadUserByUsername(String username);
 }
