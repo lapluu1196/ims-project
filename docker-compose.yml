@@ -1,0 +1,54 @@
+version: "3.8"
+
+services:
+ ims-app:
+  container_name: ims-app
+  build: .
+  ports:
+   - "8080:8080"  # Mở cổng 8080 để truy cập từ ngoài
+  restart: always
+  depends_on:
+   - ims-mysql
+   - ims-redis
+  environment:
+   - SPRING_DATASOURCE_URL=jdbc:mysql://ims-mysql:3306/interview_management?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+   - SPRING_DATASOURCE_USERNAME=root
+   - SPRING_DATASOURCE_PASSWORD=rootpassword
+   - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+   - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQL8Dialect
+   - REDIS_HOST=ims-redis
+   - REDIS_PORT=6379
+  networks:
+   - ims-network
+
+ ims-mysql:
+  image: "mysql:8.0"
+  container_name: ims-mysql
+  restart: always
+  ports:
+   - "3306:3306"  # Nếu muốn truy cập MySQL từ bên ngoài, cần mở cổng này
+  environment:
+   - MYSQL_ROOT_PASSWORD=rootpassword
+   - MYSQL_DATABASE=interview_management
+  command: --default-authentication-plugin=mysql_native_password
+  networks:
+   - ims-network
+  volumes:
+   - mysql_data:/var/lib/mysql  # Lưu trữ dữ liệu MySQL
+
+ ims-redis:
+  image: "redis:latest"
+  container_name: ims-redis
+  restart: always
+  ports:
+   - "6379:6379"
+  command: ["redis-server", "--appendonly", "yes"]
+  networks:
+   - ims-network
+
+networks:
+ ims-network:
+  driver: bridge
+
+volumes:
+ mysql_data:
