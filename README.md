@@ -50,5 +50,49 @@ This UI provides a user-friendly interface for interacting with the API and test
 ### **1️⃣ Clone the repository**
 ```bash
 git clone https://github.com/yourusername/interview-management-system.git
+```
+### **2️⃣ Navigate into the project directory:**
+```bash
 cd interview-management-system
 ```
+### **3️⃣ Build and run the application:**
+```bash
+mvn spring-boot:run
+```
+### **4️⃣ You can access the Swagger UI `http://localhost:8080/swagger-ui/index.html`**
+
+### 💻 Deploying on VPS
+### **1️⃣ Clone the repository**
+```bash
+git clone https://github.com/yourusername/interview-management-system.git
+```
+### **2️⃣ Build jar file**
+```bash
+mvn clean install -DskipTests
+```
+### **3️⃣ Send jar file, Dockerfile, docker-compose.yml to VPS**
+
+### **4️⃣ Build image and run container**
+```bash
+docker-compose up -d --build
+```
+
+### **5️⃣ You can access the Swagger UI `http://<VPS-IP>:8080/swagger-ui/index.html`**
+
+---
+ ## 👷 Contributing
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature-branch).
+3. Commit your changes (git commit -am 'Add new feature').
+4. Push to the branch (git push origin feature-branch).
+5. Open a pull request.
+
+---
+
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+This `README.md` provides a structured overview of your backend project, instructions on how to set up and run it locally, containerized with Docker, and deployed on Azure. It also outlines the authentication mechanism and includes the basic structure for contributing to the project. Let me know if you need any further adjustments or additions!
